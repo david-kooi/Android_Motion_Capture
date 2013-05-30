@@ -11,7 +11,6 @@ import java.lang.Math;
 public class ImageAnalysis {
 	
 	
-	
 	//Bitmap
 	static Bitmap bitmapToScan;
 
