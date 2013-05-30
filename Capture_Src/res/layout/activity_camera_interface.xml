@@ -1,0 +1,40 @@
+
+    <RelativeLayout 
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent" >
+     
+    <FrameLayout
+
+        android:id="@+id/cameraPreview"
+        android:layout_width="fill_parent"
+        android:layout_height="fill_parent"
+        android:layout_weight="1" 
+        tools:context=".MainActivity" >
+
+        
+      </FrameLayout>
+
+     <Button
+         android:id="@+id/captureButton"
+         android:layout_width="wrap_content"
+         android:layout_height="wrap_content"
+         android:layout_alignParentBottom="true"
+         android:layout_centerHorizontal="true"
+         android:layout_centerVertical="false"
+         android:layout_marginLeft="200dp"
+         android:onClick="captureButtonOnClick"
+         android:text="Capture" />
+     
+     <TextView
+            android:id="@+id/notificationText"
+            android:text="Motion Detected"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textAppearance="?android:attr/textAppearanceLarge" />
+    
+ </RelativeLayout> 
+
+   
+

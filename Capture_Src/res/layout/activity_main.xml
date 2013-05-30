@@ -1,0 +1,49 @@
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:paddingBottom="@dimen/activity_vertical_margin"
+    android:paddingLeft="@dimen/activity_horizontal_margin"
+    android:paddingRight="@dimen/activity_horizontal_margin"
+    android:paddingTop="@dimen/activity_vertical_margin"
+    tools:context=".MainActivity" >
+
+    <Button
+        android:id="@+id/toGalleryButton"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerHorizontal="true"
+        android:layout_centerVertical="true"
+        android:text="Gallery" />
+
+    <Button
+        android:id="@+id/settingsButton"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/toGalleryButton"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="31dp"
+        android:onClick="settingsButtonOnClick"
+        android:text="Settings" />
+
+    <Button
+        android:id="@+id/startCameraButton"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_above="@+id/toGalleryButton"
+        android:layout_alignLeft="@+id/settingsButton"
+        android:layout_marginBottom="24dp"
+        android:onClick="startCameraOnClick"
+        android:text="Capture." />
+    
+     <ImageView 
+
+     android:id="@+id/headerImage"
+	 android:layout_width="fill_parent" 
+     android:layout_height="wrap_content" 
+     android:src="@drawable/capture_image"
+     android:gravity="center_horizontal"/>
+
+
+
+</RelativeLayout>
