@@ -10,6 +10,8 @@ import java.lang.Math;
 
 public class ImageAnalysis {
 	
+
+	//blah blah blah blah
 	
 	//Bitmap
 	static Bitmap bitmapToScan;
