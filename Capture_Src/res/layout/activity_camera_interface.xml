@@ -26,13 +26,6 @@
          android:layout_marginLeft="200dp"
          android:onClick="captureButtonOnClick"
          android:text="Capture" />
-     
-     <TextView
-            android:id="@+id/notificationText"
-            android:text="Motion Detected"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:textAppearance="?android:attr/textAppearanceLarge" />
     
  </RelativeLayout> 
 

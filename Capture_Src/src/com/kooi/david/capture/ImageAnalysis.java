@@ -10,8 +10,10 @@ import java.lang.Math;
 
 public class ImageAnalysis {
 	
-
-	//blah blah blah blah
+	//Test Values
+	static double meanSD;
+	static int count = 1;
+	static double sumSD;
 	
 	//Bitmap
 	static Bitmap bitmapToScan;
@@ -70,6 +72,7 @@ public class ImageAnalysis {
 
 	}
 
+	//TODO: Create a better pixel grid
 	// Extract RGB values from bitmap
 	public static void analyzeBitmap() {
 		int i;
@@ -153,7 +156,9 @@ public class ImageAnalysis {
 			Log.d("Data", "----------");
 			Log.d("Process", "Statistics Finished");
 			
-			if(standardDev >= 25){
+			//Previous value: 25
+			//Current value: 15
+			if(standardDev >= 15){
 				return true;
 			}
 			else{
@@ -205,7 +210,12 @@ public class ImageAnalysis {
 		// mean of squared differences
 		meanOfSD = sumOfSD / total;
 		standardDeviation = Math.sqrt(meanOfSD);
-
+		//Find the mean SD 
+		sumSD = standardDeviation + sumSD;
+		meanSD = sumSD/count;
+		count++;
+		Log.d("Data","Mean SD: "+meanSD);
+		
 		return standardDeviation;
 
 	}

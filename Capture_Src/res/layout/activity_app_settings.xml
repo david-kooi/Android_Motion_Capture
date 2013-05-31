@@ -8,16 +8,6 @@
     android:paddingTop="@dimen/activity_vertical_margin"
     tools:context=".AppSettings" >
 
-    <TextView
-        android:id="@+id/textView1"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignParentTop="true"
-        android:layout_centerHorizontal="true"
-        android:layout_marginTop="44dp"
-        android:text="Motion Detection"
-        android:textAppearance="?android:attr/textAppearanceLarge" />
-
     <ToggleButton
         android:id="@+id/toggleButton1"
         android:textOn="On"
@@ -27,26 +17,6 @@
         android:layout_below="@+id/textView1"
         android:onClick="toggleButtonOnClick"
         android:layout_centerHorizontal="true" />
-
-    <TextView
-        android:id="@+id/frameSpeedInputTextView"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_below="@+id/toggleButton1"
-        android:layout_centerHorizontal="true"
-        android:layout_marginTop="34dp"
-        android:text="Frame Capture Speed"
-        android:textAppearance="?android:attr/textAppearanceLarge" />
-
-    <Button
-        android:id="@+id/setFrameSpeedButton"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignLeft="@+id/toggleButton1"
-        android:layout_below="@+id/frameCaptureSpeedTextEdit"
-        android:layout_marginTop="19dp"
-        android:onClick="setFrameSpeedOnClick"
-        android:text="Set" />
 
     <TextView
         android:id="@+id/textView2"
@@ -76,5 +46,61 @@
         android:layout_centerHorizontal="true"
         android:text="Default: 5fps"
         android:textAppearance="?android:attr/textAppearanceSmall" />
+
+    <TextView
+        android:id="@+id/textView1"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentTop="true"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="18dp"
+        android:text="Motion Detection"
+        android:textAppearance="?android:attr/textAppearanceLarge" />
+
+    <TextView
+        android:id="@+id/frameSpeedInputTextView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/toggleButton1"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="15dp"
+        android:text="Frame Capture Speed"
+        android:textAppearance="?android:attr/textAppearanceLarge" />
+
+    <Button
+        android:id="@+id/setFrameSpeedButton"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignLeft="@+id/toggleButton1"
+        android:layout_below="@+id/frameCaptureSpeedTextEdit"
+        android:onClick="setFrameSpeedOnClick"
+        android:text="Set" />
+
+    <TextView
+        android:id="@+id/delayText"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/setFrameSpeedButton"
+        android:layout_centerHorizontal="true"
+        android:text="Set Delay"
+        android:textAppearance="?android:attr/textAppearanceLarge" />
+
+    <TextView
+        android:id="@+id/seconds"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignLeft="@+id/setFrameSpeedButton"
+        android:layout_below="@+id/delayText"
+        android:text="(Seconds)"
+        android:textAppearance="?android:attr/textAppearanceSmall" />
+
+    <EditText
+        android:id="@+id/delayPicker"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignLeft="@+id/frameSpeedInputTextView"
+        android:layout_below="@+id/seconds"
+        android:ems="10"
+        android:inputType="number" />
 
 </RelativeLayout>

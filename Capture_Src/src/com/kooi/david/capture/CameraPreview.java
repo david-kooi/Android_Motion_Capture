@@ -170,7 +170,6 @@ public class CameraPreview extends SurfaceView implements
 					Log.d("Data", "*****MOTION*****");
 					Log.d("Process", "*****MOTION*****");
 					startSequence = 1;
-					publishProgress(motionTrigger);
 					return true;
 				}
 				break;
@@ -413,5 +412,6 @@ public class CameraPreview extends SurfaceView implements
 		}
 
 	}
+	
 
 }

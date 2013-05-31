@@ -9,11 +9,15 @@ import android.view.Menu;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.NumberPicker;
 import android.widget.Toast;
 import android.widget.ToggleButton;
 
 public class AppSettings extends Activity {
 
+	//TODO: Notification dialog for each settings
+	
+	EditText delayPicker;
 	ToggleButton toggleButton;
 	Button setButton;
 	EditText frameEditText;
@@ -25,6 +29,7 @@ public class AppSettings extends Activity {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_app_settings);
 		
+		delayPicker = (EditText) findViewById(R.id.delayPicker);
 		toggleButton = (ToggleButton) findViewById(R.id.toggleButton1);
 		frameEditText = (EditText) findViewById(R.id.frameCaptureSpeedTextEdit);
 		setButton = (Button) findViewById(R.id.setFrameSpeedButton);
@@ -33,6 +38,14 @@ public class AppSettings extends Activity {
 	}
 
 	public void onPause(){
+
+		//Set Delay
+		String text2 = delayPicker.getText().toString();
+		if(text2 != "''"){
+			int delay = Integer.valueOf(text2)*1000;
+			CameraInterface.delayTime = delay;
+		}
+		
 		super.onPause();
 	}
 	public void onResume(){
@@ -54,11 +67,9 @@ public class AppSettings extends Activity {
 	}
 	
 	public void setFrameSpeedOnClick(View v){
-		
-		frameSpeed = Integer.valueOf(frameEditText.getText().toString());
-		
+		String text1 = frameEditText.getText().toString();
+		frameSpeed = Integer.valueOf(text1);
 		CameraPreview.frameCaptureSpeed = 30/frameSpeed;
-		
 		Toast.makeText(this, "Frame Capture Speed: "+frameSpeed, Toast.LENGTH_SHORT).show();
 		
 	}

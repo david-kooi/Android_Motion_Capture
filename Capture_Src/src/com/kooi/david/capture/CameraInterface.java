@@ -13,6 +13,7 @@ import android.os.Environment;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
+import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.FrameLayout;
 import android.widget.TextView;
@@ -23,7 +24,6 @@ public class CameraInterface extends Activity {
 
 	
 	//TODO: Create another method of motion notification
-	
 	
 	// Camera Values
 	PreviewCallback previewCallback;
@@ -40,6 +40,7 @@ public class CameraInterface extends Activity {
 
 	// Other Values
 	public static int BUTTONCOUNT = 0;
+	public static long delayTime = 0;
 	Toast toast;
 
 	@Override
@@ -52,6 +53,10 @@ public class CameraInterface extends Activity {
 		cameraPreview = new CameraPreview(this, deviceCamera);
 		preview = (FrameLayout) findViewById(R.id.cameraPreview);
 		preview.addView(cameraPreview);
+		
+        getWindow().addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON); //Keep screen running
+        
+
 	}
 	
 	public void onPause(){
@@ -78,12 +83,13 @@ public class CameraInterface extends Activity {
 	}
 
 	// Button that starts the recording
-	public void captureButtonOnClick(View v) {
+	public void captureButtonOnClick(View v) throws InterruptedException {
 		// See CameraPreview.frameIncrement()
 		Log.d("Process", "ButtonPress");
 
 		if (BUTTONPRESSED == false) {
 			ImageAnalysis.runIndex = 0;
+			Thread.sleep(delayTime);
 			BUTTONPRESSED = true;
 			Toast.makeText(this, "Capture Started", Toast.LENGTH_SHORT).show();
 		} else if (BUTTONPRESSED == true) {
