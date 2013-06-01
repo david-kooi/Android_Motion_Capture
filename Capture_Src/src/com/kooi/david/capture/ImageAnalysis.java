@@ -98,8 +98,8 @@ public class ImageAnalysis {
 				//rgbArray[i][j] = Math.pow(redValue, 2) + Math.pow(greenValue, 2)
 				//		+ Math.pow(blueValue, 2);
 				//TODO: R^2 + G^2 + B^2 squared
-				Log.d("Process: ", "Pixel: "+i+","+j);
-				Log.d("Process","Value: "+rgbArray[i][j]);
+				//Log.d("Process: ", "Pixel: "+i+","+j);
+				//Log.d("Process","Value: "+rgbArray[i][j]);
 			}
 		}
 		Log.d("Process", "Analysis: Data Extraction Finished");

@@ -32,7 +32,7 @@ public class CameraPreview extends SurfaceView implements
 	private byte[] frame = new byte[1];
 	private Camera deviceCamera;
 	Camera.Parameters cameraParams;
-	static int frameCaptureSpeed = 15; // Speed for motion Detection is 7
+	static int frameCaptureSpeed = 7; // Speed for motion Detection is 7
 										// (4.2fps)
 										// Speed for rapid capture is 5 (6fps)
 
@@ -484,9 +484,10 @@ public class CameraPreview extends SurfaceView implements
 				else if (B > 255)
 					B = 255;
 				out[pixPtr++] = 0xff000000 + (B << 16) + (G << 8) + R;
-				Log.d("Data", "Decode Height: " + j);
-				Log.d("Data", "Decode Width: " + i);
-				Log.d("Data", "Data: "+ out[pixPtr]);
+				
+				//Log.d("Data", "Decode Height: " + j);
+				//Log.d("Data", "Decode Width: " + i);
+				//Log.d("Data", "Data: "+ out[pixPtr]);
 			}
 		}
 
