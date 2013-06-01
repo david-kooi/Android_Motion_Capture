@@ -46,7 +46,6 @@ public class ImageAnalysis {
 	public static void setBitmapSpecs(Bitmap whatBitmap) {
 		imgHeight = whatBitmap.getHeight();
 		imgWidth = whatBitmap.getWidth();
-		bitmapToScan = whatBitmap;
 
 		// TODO: Create algorithm for incrementation
 		// Horizontal and Vertical increments set for a 480X720 image
@@ -54,22 +53,25 @@ public class ImageAnalysis {
 		horizontalInc = 72;
 		gridHeight = (imgHeight / verticalInc) + 1; // +1 to include borders
 		gridWidth = (imgWidth / horizontalInc) + 1;
-
-		if (runIndex == 0) { 								// Initialize arrays on first run
+		//Initialize Arrays------------------------------------>								
 			controlRgbArray = new int[gridHeight][gridWidth];
-			rgbArray = new int[gridHeight][gridWidth]; 		// Check initialization
+			rgbArray = new int[gridHeight][gridWidth]; 	
 			resultantRgbArray = new int[gridHeight][gridWidth];
-			//Log.d("Process", "Arrays initialized");
-		} else { 											 // Control image is always the previous frame
-			for (int i = 0; i < gridHeight; i++) {
-				for (int j = 0; j < gridWidth; j++) {
-					controlRgbArray[i][j] = rgbArray[i][j];
-				}
+			Log.d("Process", "Arrays initialized");
+		//Initialize Arrays--------------------------------------^
+		controlMean = calculateMean(controlRgbArray); //For testing purposes
+
+		
+
+	}
+	public static void setBitmap(Bitmap whatBitmap){
+		bitmapToScan = whatBitmap;
+		// Control image is always the previous frame
+		for (int i = 0; i < gridHeight; i++) {
+			for (int j = 0; j < gridWidth; j++) {
+				controlRgbArray[i][j] = rgbArray[i][j];
 			}
-			controlMean = calculateMean(controlRgbArray);
-
 		}
-
 	}
 
 	//TODO: Create a better pixel grid
@@ -100,8 +102,8 @@ public class ImageAnalysis {
 
 				rgbArray[rowIndex][colIndex] = redValue;
 
-				// Log.d("Process: ", "Pixel: "+j+","+i);
-				// Log.d("Process","Value: "+rgbArray[rowIndex][colIndex]);
+				//Log.d("Process: ", "Pixel: "+j+","+i);
+				//Log.d("Process","Value: "+rgbArray[rowIndex][colIndex]);
 
 				colIndex++;
 			}
@@ -158,7 +160,7 @@ public class ImageAnalysis {
 			
 			//Previous value: 25
 			//Current value: 15
-			if(standardDev >= 15){
+			if(standardDev >= 25){
 				return true;
 			}
 			else{
