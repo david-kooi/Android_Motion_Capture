@@ -95,8 +95,8 @@ public class ImageAnalysis {
 
 				rgbArray[rowIndex][colIndex] = redValue;
 
-				// Log.d("Process: ", "Pixel: "+j+","+i);
-				// Log.d("Process","Value: "+rgbArray[rowIndex][colIndex]);
+				 Log.d("Process: ", "Pixel: "+j+","+i);
+				 Log.d("Process","Value: "+rgbArray[rowIndex][colIndex]);
 
 				colIndex++;
 			}
