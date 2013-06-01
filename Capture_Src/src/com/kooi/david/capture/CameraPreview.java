@@ -32,7 +32,7 @@ public class CameraPreview extends SurfaceView implements
 	private byte[] frame = new byte[1];
 	private Camera deviceCamera;
 	Camera.Parameters cameraParams;
-	static int frameCaptureSpeed = 7; // Speed for motion Detection is 7
+	static int frameCaptureSpeed = 15; // Speed for motion Detection is 7
 										// (4.2fps)
 										// Speed for rapid capture is 5 (6fps)
 
@@ -157,7 +157,7 @@ public class CameraPreview extends SurfaceView implements
 			case 0:
 				// Decode
 				Log.d("Data", "***Analysis Start***");
-				if(!optimizedDecode){
+				if(!optimizedDecode){ 
 					Log.d("Check","Standard Decode");
 					decodeYUV(argb8888, data[0], WIDTH, HEIGHT);//1. Decode data
 					final Bitmap bitmap = Bitmap.createBitmap(argb8888, WIDTH, //2. Create bitmap from data
@@ -174,7 +174,7 @@ public class CameraPreview extends SurfaceView implements
 					Log.d("Check", "Optimized Height: " + bitmap.getHeight());
 					Log.d("Check", "Optimized Height: " + bitmap.getWidth());
 					ImageAnalysis.setBitmap(bitmap);
-					ImageAnalysis.analyzeBitmap();							//3. Analyze bitmap
+					ImageAnalysis.extractValuesFromBitmap();							//3. Analyze bitmap
 					motionTrigger = ImageAnalysis.statisticalAnalysis();   //4. Returns boolean based on analysis
 					ImageAnalysis.runIndex++;
 					if (motionTrigger) { 
@@ -484,6 +484,9 @@ public class CameraPreview extends SurfaceView implements
 				else if (B > 255)
 					B = 255;
 				out[pixPtr++] = 0xff000000 + (B << 16) + (G << 8) + R;
+				Log.d("Data", "Decode Height: " + j);
+				Log.d("Data", "Decode Width: " + i);
+				Log.d("Data", "Data: "+ out[pixPtr]);
 			}
 		}
 

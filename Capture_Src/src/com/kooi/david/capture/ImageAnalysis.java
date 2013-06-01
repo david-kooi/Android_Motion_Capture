@@ -7,6 +7,7 @@ import android.util.Log;
 import android.widget.Toast;
 
 import java.lang.Math;
+import java.util.ArrayList;
 
 public class ImageAnalysis {
 	
@@ -14,7 +15,7 @@ public class ImageAnalysis {
 	static double meanSD;
 	static int count = 1;
 	static double sumSD;
-	
+	static ArrayList<String> dataList = new ArrayList<String>();
 	//Bitmap
 	static Bitmap bitmapToScan;
 
@@ -32,11 +33,11 @@ public class ImageAnalysis {
 	static Color c;
 
 	// Arrays------------------------>
-	static int rgbArray[][];
-	static int resultantRgbArray[][];
+	static double rgbArray[][];
+	static double resultantRgbArray[][];
 
 	// Control Values----------------->
-	static int controlRgbArray[][];
+	static double controlRgbArray[][];
 	static double TEMPMEAN = 0;
 	static double controlMean = 0;
 	static int runIndex = 0; // How many times ImageAnalysis has been run
@@ -49,14 +50,15 @@ public class ImageAnalysis {
 
 		// TODO: Create algorithm for incrementation
 		// Horizontal and Vertical increments set for a 480X720 image
+		//Grid: 6X10
 		verticalInc = 80;
 		horizontalInc = 72;
 		gridHeight = (imgHeight / verticalInc); 
 		gridWidth = (imgWidth / horizontalInc);
 		//Initialize Arrays------------------------------------>								
-			controlRgbArray = new int[gridHeight][gridWidth];
-			rgbArray = new int[gridHeight][gridWidth]; 	
-			resultantRgbArray = new int[gridHeight][gridWidth];
+			controlRgbArray = new double[gridHeight][gridWidth];
+			rgbArray = new double[gridHeight][gridWidth]; 	
+			resultantRgbArray = new double[gridHeight][gridWidth];
 			Log.d("Process", "Arrays initialized");
 		//Initialize Arrays--------------------------------------^
 
@@ -75,26 +77,29 @@ public class ImageAnalysis {
 
 	//TODO: Create a better pixel grid
 	// Extract RGB values from bitmap
-	public static void analyzeBitmap() {
+	public static void extractValuesFromBitmap() {
 		int i;
 		int j;
 
 		//Log.d("Process", "Bitmap Extraction is Go!");
 
-		rgbArray = new int[gridHeight][gridWidth];
+		rgbArray = new double[gridHeight][gridWidth];
 
-		for (i = 0; i <= gridHeight; i++) {
-			for (j = 0; j <= gridWidth; j++) {
+		for (i = 0; i < gridHeight; i++) {
+			for (j = 0; j < gridWidth; j++) {
 
 				baseValue = bitmapToScan.getPixel(j, i);
 				redValue = Color.red(baseValue);
 				greenValue = Color.green(baseValue);
 				blueValue = Color.blue(baseValue);
 
-				rgbArray[j][i] = redValue;
-
-				Log.d("Process: ", "Pixel: "+j+","+i);
-				Log.d("Process","Value: "+rgbArray[j][i]);
+				rgbArray[i][j] = blueValue;
+				
+				//rgbArray[i][j] = Math.pow(redValue, 2) + Math.pow(greenValue, 2)
+				//		+ Math.pow(blueValue, 2);
+				//TODO: R^2 + G^2 + B^2 squared
+				Log.d("Process: ", "Pixel: "+i+","+j);
+				Log.d("Process","Value: "+rgbArray[i][j]);
 			}
 		}
 		Log.d("Process", "Analysis: Data Extraction Finished");
@@ -124,8 +129,8 @@ public class ImageAnalysis {
 		else {
 			for (int i = 0; i < gridHeight; i++) {
 				for (int j = 0; j < gridWidth; j++) {
-					int controlVal = controlRgbArray[i][j];
-					int imageVal = rgbArray[i][j];
+					double controlVal = controlRgbArray[i][j];
+					double imageVal = rgbArray[i][j];
 					// Log.d("Process", "Analysis: controlVal:"+controlVal);
 					// Log.d("Process","Analysis: val: "+imageVal);
 					resultantRgbArray[i][j] = (controlVal - imageVal);
@@ -147,7 +152,7 @@ public class ImageAnalysis {
 			
 			//Previous value: 25
 			//Current value: 15
-			if(standardDev >= 25){
+			if(standardDev >= 1000){
 				return true;
 			}
 			else{
@@ -156,8 +161,8 @@ public class ImageAnalysis {
 		}
 	}
 
-	private static double calculateMean(int[][] whatArray) {
-		int sum = 0;
+	private static double calculateMean(double[][] whatArray) {
+		double sum = 0;
 		int total = 0;
 		double mean;
 
@@ -173,7 +178,7 @@ public class ImageAnalysis {
 	}
 
 	private static double calculateStandardDeviation(double whatMean,
-			int[][] whatArray) {
+			double[][] whatArray) {
 		double mean = whatMean;
 		double tempValue;
 		int total = gridWidth * gridHeight;
