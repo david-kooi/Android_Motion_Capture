@@ -51,17 +51,14 @@ public class ImageAnalysis {
 		// Horizontal and Vertical increments set for a 480X720 image
 		verticalInc = 80;
 		horizontalInc = 72;
-		gridHeight = (imgHeight / verticalInc) + 1; // +1 to include borders
-		gridWidth = (imgWidth / horizontalInc) + 1;
+		gridHeight = (imgHeight / verticalInc); 
+		gridWidth = (imgWidth / horizontalInc);
 		//Initialize Arrays------------------------------------>								
 			controlRgbArray = new int[gridHeight][gridWidth];
 			rgbArray = new int[gridHeight][gridWidth]; 	
 			resultantRgbArray = new int[gridHeight][gridWidth];
 			Log.d("Process", "Arrays initialized");
 		//Initialize Arrays--------------------------------------^
-		controlMean = calculateMean(controlRgbArray); //For testing purposes
-
-		
 
 	}
 	public static void setBitmap(Bitmap whatBitmap){
@@ -72,6 +69,8 @@ public class ImageAnalysis {
 				controlRgbArray[i][j] = rgbArray[i][j];
 			}
 		}
+		controlMean = calculateMean(controlRgbArray); //For testing purposes
+
 	}
 
 	//TODO: Create a better pixel grid
@@ -79,36 +78,24 @@ public class ImageAnalysis {
 	public static void analyzeBitmap() {
 		int i;
 		int j;
-		int rowIndex = 0;
-		int colIndex = 0;
+
 		//Log.d("Process", "Bitmap Extraction is Go!");
 
 		rgbArray = new int[gridHeight][gridWidth];
 
-		for (i = 0; i <= imgHeight; i = (i + verticalInc)) {
-			if (i == imgHeight) {
-				i = imgHeight - 1;
-			}
-			colIndex = 0;
-			for (j = 0; j <= imgWidth; j = (j + horizontalInc)) {
-				if (j == imgWidth) {
-					j = imgWidth - 1;
-				}
+		for (i = 0; i <= gridHeight; i++) {
+			for (j = 0; j <= gridWidth; j++) {
 
 				baseValue = bitmapToScan.getPixel(j, i);
 				redValue = Color.red(baseValue);
 				greenValue = Color.green(baseValue);
 				blueValue = Color.blue(baseValue);
 
-				rgbArray[rowIndex][colIndex] = redValue;
+				rgbArray[j][i] = redValue;
 
-				//Log.d("Process: ", "Pixel: "+j+","+i);
-				//Log.d("Process","Value: "+rgbArray[rowIndex][colIndex]);
-
-				colIndex++;
+				Log.d("Process: ", "Pixel: "+j+","+i);
+				Log.d("Process","Value: "+rgbArray[j][i]);
 			}
-
-			rowIndex++;
 		}
 		Log.d("Process", "Analysis: Data Extraction Finished");
 

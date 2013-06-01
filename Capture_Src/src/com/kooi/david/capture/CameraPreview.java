@@ -169,8 +169,8 @@ public class CameraPreview extends SurfaceView implements
 					Log.d("Check", "Optimized Decode");
 					// Analyze Bitmap
 					decodeYUVForMotion(argb8888,data[0],WIDTH,HEIGHT); //1. Decode Data
-					final Bitmap bitmap = Bitmap.createBitmap(argb8888, WIDTH, //2. Create bitmap from data
-							HEIGHT, Config.ARGB_8888);
+					final Bitmap bitmap = Bitmap.createBitmap(argb8888, ImageAnalysis.gridWidth, //2. Create bitmap from data
+							ImageAnalysis.gridHeight, Config.ARGB_8888);
 					Log.d("Check", "Optimized Height: " + bitmap.getHeight());
 					Log.d("Check", "Optimized Height: " + bitmap.getWidth());
 					ImageAnalysis.setBitmap(bitmap);
@@ -229,6 +229,7 @@ public class CameraPreview extends SurfaceView implements
 				fos = new FileOutputStream(pictureFile);
 				// Log.d("Process", "FileOutputStream Created");
 				bitmap.compress(Bitmap.CompressFormat.JPEG, 100, fos);
+				
 				// Log.d("Process",
 				// "Bitmap Compressed To: "
 				// + pictureFile.getAbsolutePath());
