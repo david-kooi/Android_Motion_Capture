@@ -32,7 +32,7 @@ public class CameraPreview extends SurfaceView implements
 	private byte[] frame = new byte[1];
 	private Camera deviceCamera;
 	Camera.Parameters cameraParams;
-	static int frameCaptureSpeed = 7; // Speed for motion Detection is 7
+	static int frameCaptureSpeed = 20; // Speed for motion Detection is 7
 										// (4.2fps)
 										// Speed for rapid capture is 5 (6fps)
 
@@ -170,7 +170,7 @@ public class CameraPreview extends SurfaceView implements
 					// Analyze Bitmap
 					decodeYUVForMotion(argb8888,data[0],WIDTH,HEIGHT); //1. Decode Data
 					final Bitmap bitmap = Bitmap.createBitmap(argb8888, ImageAnalysis.gridWidth, //2. Create bitmap from data
-							ImageAnalysis.gridHeight, Config.ARGB_8888);
+							ImageAnalysis.gridHeight + 1, Config.ARGB_8888);
 					Log.d("Check", "Optimized Height: " + bitmap.getHeight());
 					Log.d("Check", "Optimized Height: " + bitmap.getWidth());
 					ImageAnalysis.setBitmap(bitmap);
@@ -421,6 +421,8 @@ public class CameraPreview extends SurfaceView implements
 				else if (B > 255)
 					B = 255;
 				out[pixPtr++] = 0xff000000 + (B << 16) + (G << 8) + R;
+				//Log.d("Pix", "pixPtr: " + pixPtr);
+
 			}
 		}
 
@@ -440,18 +442,19 @@ public class CameraPreview extends SurfaceView implements
 			throw new IllegalArgumentException("buffer fg size " + fg.length
 					+ " < minimum " + sz * 3 / 2);
 		int i, j;
+		int count = 0;
 		int Y, Cr = 0, Cb = 0;
 		for (j = 0; j <= height; j= j + ImageAnalysis.verticalInc) {
 			if(j == height){
 				j = height - 1;
 			}
 			int pixPtr = j * width;
+			int outIndex = count * ImageAnalysis.gridWidth;
+			count++;
 			final int jDiv2 = j >> 1;
-			for (i = 0; i < width; i = i + ImageAnalysis.horizontalInc) {
-				if(i == width){
-					i = width - 1;
-				}
+			for (i = 0; i < ImageAnalysis.gridWidth; i++) {
 				Y = fg[pixPtr];
+				//Log.d("Data", "Y: " + Y);
 				if (Y < 0)
 					Y += 255;
 				if ((i & 0x1) != 1) {
@@ -483,11 +486,11 @@ public class CameraPreview extends SurfaceView implements
 					B = 0;
 				else if (B > 255)
 					B = 255;
-				out[pixPtr++] = 0xff000000 + (B << 16) + (G << 8) + R;
+				out[outIndex++] = 0xff000000 + (B << 16) + (G << 8) + R;
+				//Log.d("Index", "j: " + j);
+				//Log.d("Index", "i: " + i);
+				//Log.d("Index", "outIndex: " + outIndex);
 				
-				//Log.d("Data", "Decode Height: " + j);
-				//Log.d("Data", "Decode Width: " + i);
-				//Log.d("Data", "Data: "+ out[pixPtr]);
 			}
 		}
 
