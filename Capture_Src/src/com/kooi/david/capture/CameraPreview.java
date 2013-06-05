@@ -49,10 +49,8 @@ public class CameraPreview extends SurfaceView implements
 	ArrayList<byte[]> byteBuffer;
 
 	// Process values--------------->
-	int buttonCount; // Counts how many times the capture button has been
-						// pressed
 
-	static int startSequence = 0;   // 0: Motion Detection
+	static int detectOrCapture = 0;   // 0: Motion Detection
 									// 1: Rapid Frame Save
 	boolean captureFrame = false;
 	int frameCount = 0;
@@ -61,10 +59,6 @@ public class CameraPreview extends SurfaceView implements
 	boolean motionTrigger = false;
 	static boolean optimizedDecode = false; 
 
-	// Other values------------>
-	double meanOne;
-	double meanTwo;
-	Toast toast;
 
 	@SuppressWarnings("deprecation")
 	public CameraPreview(Context whatContext, Camera whatCamera) {
@@ -87,9 +81,9 @@ public class CameraPreview extends SurfaceView implements
 
 	private void motionSettings() {
 		if (AppSettings.motionToggle) {
-			startSequence = 0;
+			detectOrCapture = 0;
 		} else {
-			startSequence = 1;
+			detectOrCapture = 1;
 		}
 	}
 
@@ -143,30 +137,30 @@ public class CameraPreview extends SurfaceView implements
 		private final int HEIGHT = previewHeight;
 		private final int ARRAY_LENGTH = previewWidth * previewWidth * 3 / 2;
 
-		// pre-allocated working arrays
+		// Pre-allocated working arrays
 		private int[] argb8888 = new int[ARRAY_LENGTH];
 
 		@Override
 		protected Boolean doInBackground(byte[]... data) {
 			// Log.d("Process", "FrameHandler is Go!");
 //
-			// startSequence = 0: image analysis
-			// startSequence = 1: Saves byte data to a buffer...byte data will
-			// be compressed into a jpeg post capture
-			switch (startSequence) {
+			/* If detectOrCapture = 0: image analysis
+			   If detectOrCaoture = 1: Saves byte data to a buffer...byte data will
+			 be compressed into a jpeg post capture
+			 */
+			switch (detectOrCapture) {
 			case 0:
-				// Decode
 				Log.d("Data", "***Analysis Start***");
-				if(!optimizedDecode){ 
-					Log.d("Check","Standard Decode");
+				if(!optimizedDecode){ //Initial Decode
+					Log.d("Process","Standard Decode");
 					decodeYUV(argb8888, data[0], WIDTH, HEIGHT);//1. Decode data
 					final Bitmap bitmap = Bitmap.createBitmap(argb8888, WIDTH, //2. Create bitmap from data
 							HEIGHT, Config.ARGB_8888);
 					ImageAnalysis.setBitmapSpecs(bitmap);//Set variables in ImageAnalysis
 					optimizedDecode = true;
 				}
-				else{
-					Log.d("Check", "Optimized Decode");
+				else{ //Optimized Decode
+					Log.d("Process", "Optimized Decode");
 					// Analyze Bitmap
 					decodeYUVForMotion(argb8888,data[0],WIDTH,HEIGHT); //1. Decode Data
 					final Bitmap bitmap = Bitmap.createBitmap(argb8888, ImageAnalysis.gridWidth, //2. Create bitmap from data
@@ -180,7 +174,7 @@ public class CameraPreview extends SurfaceView implements
 					if (motionTrigger) { 
 						Log.d("Data", "*****MOTION*****");
 						Log.d("Process", "*****MOTION*****");
-						startSequence = 1;
+						detectOrCapture = 1;
 						return true;
 					}
 				}
@@ -367,7 +361,6 @@ public class CameraPreview extends SurfaceView implements
 	}
 
 	
-	//TODO: Find a way for a faster decode
 	// David Manpearl 081201 
 	public void decodeYUV(int[] out, byte[] fg, int width, int height)
 			throws NullPointerException, IllegalArgumentException {

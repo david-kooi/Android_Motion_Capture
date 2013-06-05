@@ -68,10 +68,10 @@ public class CameraInterface extends Activity {
 		//TODO: Find a way to persist settings
 		
 		if(AppSettings.motionToggle){
-			CameraPreview.startSequence = 0; 
+			CameraPreview.detectOrCapture = 0; 
 		}
 		else{
-			CameraPreview.startSequence = 1;
+			CameraPreview.detectOrCapture = 1;
 		}
 		super.onResume();
 	}

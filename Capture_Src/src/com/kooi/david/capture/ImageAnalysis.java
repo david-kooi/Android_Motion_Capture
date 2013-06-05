@@ -57,9 +57,9 @@ public class ImageAnalysis {
 
 		// TODO: Create algorithm for incrementation
 		// Horizontal and Vertical increments set for a 480X720 image
-		//Grid: 6X10
-		verticalInc = 80;
-		horizontalInc = 72;
+		//Grid: 8X20
+		verticalInc = 60;
+		horizontalInc = 60;
 		gridHeight = (imgHeight / verticalInc) + 1;
 		gridWidth = (imgWidth / horizontalInc) + 1;
 		//Initialize Arrays------------------------------------>								
@@ -70,6 +70,7 @@ public class ImageAnalysis {
 		//Initialize Arrays--------------------------------------^
 
 	}
+	//Sets what bitmap is to be analyzed
 	public static void setBitmap(Bitmap whatBitmap){
 		bitmapToScan = whatBitmap;
 		// Control image is always the previous frame
@@ -110,23 +111,6 @@ public class ImageAnalysis {
 
 	}
 	
-	public static void saveDataFile(){
-		String root = Environment.getExternalStorageDirectory().getPath();
-		
-		File dir = new File(root);
-		dir.mkdir();
-		Log.d("Save", "Save Location: " + dir.getPath());
-		
-		dataFile = new File(dir,"imageData" + fileIndex + ".txt");
-		
-		String stringToSave = dataList.toString();
-		try {
-			FileUtils.writeStringToFile(dataFile, stringToSave);
-			Log.d("Save", "DataSaved");
-		} catch (IOException e) {
-			e.printStackTrace();
-		}
-	}
 
 	public static boolean statisticalAnalysis() {
 		//Log.d("Process", "Analysis is Go!");
@@ -174,7 +158,7 @@ public class ImageAnalysis {
 			
 			//Previous value: 25
 			//Current value: 15
-			if(standardDev >= 1000){
+			if(standardDev >= 15){
 				return true;
 			}
 			else{
@@ -223,7 +207,7 @@ public class ImageAnalysis {
 			}
 		}
 
-		// mean of squared differences
+		//Mean of squared differences
 		meanOfSD = sumOfSD / total;
 		standardDeviation = Math.sqrt(meanOfSD);
 		//Find the mean SD 
