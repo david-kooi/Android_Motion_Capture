@@ -60,8 +60,8 @@ public class ImageAnalysis {
 		//Grid: 6X10
 		verticalInc = 80;
 		horizontalInc = 72;
-		gridHeight = (imgHeight / verticalInc);
-		gridWidth = (imgWidth / horizontalInc);
+		gridHeight = (imgHeight / verticalInc) + 1;
+		gridWidth = (imgWidth / horizontalInc) + 1;
 		//Initialize Arrays------------------------------------>								
 		controlRgbArray = new double[gridHeight][gridWidth];
 		rgbArray = new double[gridHeight][gridWidth]; 	
@@ -102,19 +102,11 @@ public class ImageAnalysis {
 				rgbArray[i][j] = (blueValue + redValue + greenValue)/3;
 				
 				//Log.d("Process: ", "Pixel: "+i+","+j);
-				Log.d("Process","Value: "+rgbArray[i][j]);
-				String iIndex = i.toString();
-				String jIndex = j.toString();
-				
-				dataList.add(jIndex);
-				dataList.add(iIndex);
-				dataList.add(String.valueOf(rgbArray[i][j]));
+				//Log.d("Process","Value: "+rgbArray[i][j]);
+
 			}
 		}
-		//saveDataFile();
-		//fileIndex++;
-		//Log.d("Save", "Data File Saved");
-		//Log.d("Process", "Analysis: Data Extraction Finished");
+
 
 	}
 	

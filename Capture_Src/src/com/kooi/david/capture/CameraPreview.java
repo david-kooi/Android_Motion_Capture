@@ -32,7 +32,7 @@ public class CameraPreview extends SurfaceView implements
 	private byte[] frame = new byte[1];
 	private Camera deviceCamera;
 	Camera.Parameters cameraParams;
-	static int frameCaptureSpeed = 20; // Speed for motion Detection is 7
+	static int frameCaptureSpeed = 5; // Speed for motion Detection is 7
 										// (4.2fps)
 										// Speed for rapid capture is 5 (6fps)
 
@@ -170,7 +170,7 @@ public class CameraPreview extends SurfaceView implements
 					// Analyze Bitmap
 					decodeYUVForMotion(argb8888,data[0],WIDTH,HEIGHT); //1. Decode Data
 					final Bitmap bitmap = Bitmap.createBitmap(argb8888, ImageAnalysis.gridWidth, //2. Create bitmap from data
-							ImageAnalysis.gridHeight + 1, Config.ARGB_8888);
+							ImageAnalysis.gridHeight, Config.ARGB_8888);
 					Log.d("Check", "Optimized Height: " + bitmap.getHeight());
 					Log.d("Check", "Optimized Height: " + bitmap.getWidth());
 					ImageAnalysis.setBitmap(bitmap);
