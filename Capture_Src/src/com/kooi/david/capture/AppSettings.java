@@ -4,16 +4,19 @@ import com.example.cameratextv1.R;
 
 import android.os.Bundle;
 import android.app.Activity;
+import android.app.ListActivity;
 import android.util.Log;
 import android.view.Menu;
 import android.view.View;
+import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ListView;
 import android.widget.NumberPicker;
 import android.widget.Toast;
 import android.widget.ToggleButton;
 
-public class AppSettings extends Activity {
+public class AppSettings extends ListActivity {
 
 	//TODO: Notification dialog for each settings
 	
@@ -21,22 +24,47 @@ public class AppSettings extends Activity {
 	ToggleButton toggleButton;
 	Button setButton;
 	EditText frameEditText;
+	ListView settingsList;
 	static boolean motionToggle = true;
 	static int frameSpeed = 0;
-	
+	String[] settings = {"Motion Detection", "Delay", "Capture Speed"};
+
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
-		setContentView(R.layout.activity_app_settings);
+	    setContentView(R.layout.activity_settings);
+	    
+		settingsList = (ListView) findViewById(android.R.id.list);
+	    
+	    setListAdapter(new ArrayAdapter<String>(
+			      this,
+			      android.R.layout.simple_list_item_1,
+			      settings));
+	
 		
-		delayPicker = (EditText) findViewById(R.id.delayPicker);
-		toggleButton = (ToggleButton) findViewById(R.id.toggleButton1);
-		frameEditText = (EditText) findViewById(R.id.frameCaptureSpeedTextEdit);
-		setButton = (Button) findViewById(R.id.setFrameSpeedButton);
-		
-		toggleButton.setChecked(true);
+
+	}
+	
+	@Override
+	protected void onListItemClick(ListView l, View v, int position, long id) {
+	super.onListItemClick(l, v, position, id);
+	//Position 0: Motion Detection
+	//Position 2: Delay
+	//Position 3: Capture Speed
+	
+		if(position == 0){
+			//Dialog
+		}
+		else if (position == 1){
+			//Dialog
+		}
+		else if (position == 2){
+			//Dialog
+		}
 	}
 
+	
+	
 	public void onPause(){
 
 		//Set Delay
@@ -51,6 +79,18 @@ public class AppSettings extends Activity {
 	public void onResume(){
 		super.onResume();
 	}
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
 	
 	public void toggleButtonOnClick(View v){
 		
