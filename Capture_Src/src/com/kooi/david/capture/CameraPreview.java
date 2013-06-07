@@ -73,6 +73,7 @@ public class CameraPreview extends SurfaceView implements
 											  // extraction
 
 		deviceCamera = whatCamera;
+		Log.d("Test", "whatCamera: " + whatCamera);
 		cameraParams = deviceCamera.getParameters();
 
 		thisHolder = getHolder();
@@ -261,8 +262,8 @@ public class CameraPreview extends SurfaceView implements
 	@Override
 	public void surfaceCreated(SurfaceHolder holder) {
 		try {
-			// deviceCamera.setPreviewDisplay(thisHolder);
-			// deviceCamera.startPreview();
+			//deviceCamera.setPreviewDisplay(thisHolder);
+			//deviceCamera.startPreview();
 		} catch (Exception e) {
 			Log.d("Process:", "Error setting camera preview: " + e.getMessage());
 
@@ -279,7 +280,8 @@ public class CameraPreview extends SurfaceView implements
 
 	@Override
 	public void surfaceDestroyed(SurfaceHolder holder) {
-		releaseCamera();
+		//releaseCamera();
+		//deviceCamera.stopPreview();
 	}
 
 	@Override
@@ -291,7 +293,7 @@ public class CameraPreview extends SurfaceView implements
 		if (CameraInterface.PREVIEWRUNNING) {
 			deviceCamera.stopPreview();
 		}
-
+		Log.d("Test", "Camera: " + deviceCamera);
 		// Set camera parameters---------------------------------------------->
 		cameraParams = deviceCamera.getParameters();
 		List<Camera.Size> list = cameraParams.getSupportedPreviewSizes();

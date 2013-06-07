@@ -62,18 +62,28 @@ public class CameraInterface extends Activity {
 	public void onPause(){
 		super.onPause();
 		BUTTONPRESSED = false;
+		PREVIEWRUNNING = false;
+		preview.removeAllViews();
 		this.releaseCamera();
 	}
 	public void onResume(){
-		//TODO: Find a way to persist settings
+		super.onResume();
+		if(deviceCamera == null){
+			
+		deviceCamera = Camera.open();
+		Log.d("Test", "Interface Camera: " + deviceCamera);
+		cameraPreview = new CameraPreview(this, deviceCamera);
+		preview = (FrameLayout) findViewById(R.id.cameraPreview);
+		preview.addView(cameraPreview);
 		
+		}
+		deviceCamera.startPreview();
 		if(AppSettings.motionToggle){
 			CameraPreview.startSequence = 0; 
 		}
 		else{
 			CameraPreview.startSequence = 1;
 		}
-		super.onResume();
 	}
 	public void onDestory(){
 		super.onDestroy();
@@ -116,14 +126,17 @@ public class CameraInterface extends Activity {
 		try {
 			c = Camera.open(); // attempt to get a Camera instance
 		} catch (Exception e) {
+			Log.e("Error", "Camera Error: " + e);
 		}
 		return c; // returns null if camera is unavailable
 	}
 
 	public void releaseCamera() {
 		if (deviceCamera != null) {
-			deviceCamera.release(); // release the camera for other applications
-			deviceCamera = null;
+			deviceCamera.stopPreview();      
+			deviceCamera.setPreviewCallback(null);    
+            deviceCamera.release();     
+            deviceCamera = null;  
 		}
 	}
 
