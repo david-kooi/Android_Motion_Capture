@@ -35,7 +35,7 @@ public class CameraPreview extends SurfaceView implements
 	static int frameCaptureSpeed = 5; // Speed for motion Detection is 7
 										// (4.2fps)
 										// Speed for rapid capture is 5 (6fps)
-
+										//Preference Value
 	// Preview Variables------------->
 	private SurfaceHolder thisHolder;
 	private int previewHeight;
@@ -51,7 +51,8 @@ public class CameraPreview extends SurfaceView implements
 	// Process values--------------->
 
 	static int detectOrCapture = 0;   // 0: Motion Detection
-									// 1: Rapid Frame Save
+									  // 1: Rapid Frame Save
+									 //Preference Value
 	boolean captureFrame = false;
 	int frameCount = 0;
 	int loopCount = 0;

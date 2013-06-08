@@ -4,8 +4,14 @@ import com.example.cameratextv1.R;
 
 import android.os.Bundle;
 import android.app.Activity;
+import android.app.AlertDialog;
+import android.app.Dialog;
+import android.app.DialogFragment;
 import android.app.ListActivity;
+import android.content.Context;
+import android.content.DialogInterface;
 import android.util.Log;
+import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.View;
 import android.widget.ArrayAdapter;
@@ -53,7 +59,9 @@ public class AppSettings extends ListActivity {
 	//Position 3: Capture Speed
 	
 		if(position == 0){
-			//Dialog
+			FireMissilesDialogFragment dialog = new FireMissilesDialogFragment();
+			dialog.show(getFragmentManager(), "Dialog");
+
 		}
 		else if (position == 1){
 			//Dialog
@@ -80,38 +88,69 @@ public class AppSettings extends ListActivity {
 		super.onResume();
 	}
 	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	public void toggleButtonOnClick(View v){
-		
-		if(toggleButton.isChecked()){
-			motionToggle = true;
-			Log.d("Process", "Motion Detection: "+motionToggle);
-			Toast.makeText(this, "Motion Detection Activated", Toast.LENGTH_SHORT).show();
-		}
-		else if(!toggleButton.isChecked()){
-			motionToggle = false;
-			Log.d("Process", "Motion Detection: " + motionToggle);
-			Toast.makeText(this, "Motion Detection Deactivated", Toast.LENGTH_SHORT).show();
-		}
-	}
-	
-	public void setFrameSpeedOnClick(View v){
-		String text1 = frameEditText.getText().toString();
-		frameSpeed = Integer.valueOf(text1);
-		CameraPreview.frameCaptureSpeed = 30/frameSpeed;
-		Toast.makeText(this, "Frame Capture Speed: "+frameSpeed, Toast.LENGTH_SHORT).show();
+	public static void getDialogResult(int result){
 		
 	}
+	
+	
+	//TODO: Create DialogFragments for each settings
+	public class FireMissilesDialogFragment extends DialogFragment {
+	    @Override
+	    public Dialog onCreateDialog(Bundle savedInstanceState) {
+	        // Use the Builder class for convenient dialog construction
+	        AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
+	        builder.setMessage("asasd")
+	               .setPositiveButton("asda", new DialogInterface.OnClickListener() {
+	                   public void onClick(DialogInterface dialog, int id) {
+	                       // FIRE ZE MISSILES!
+	                   }
+	               })
+	               .setNegativeButton("asda", new DialogInterface.OnClickListener() {
+	                   public void onClick(DialogInterface dialog, int id) {
+	                       // User cancelled the dialog
+	                   }
+	               });
+	        // Create the AlertDialog object and return it
+	        return builder.create();
+	    }
+	}
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+//public void toggleButtonOnClick(View v){
+//		
+//		if(toggleButton.isChecked()){
+//			motionToggle = true;
+//			Log.d("Process", "Motion Detection: "+motionToggle);
+//			Toast.makeText(this, "Motion Detection Activated", Toast.LENGTH_SHORT).show();
+//		}
+//		else if(!toggleButton.isChecked()){
+//			motionToggle = false;
+//			Log.d("Process", "Motion Detection: " + motionToggle);
+//			Toast.makeText(this, "Motion Detection Deactivated", Toast.LENGTH_SHORT).show();
+//		}
+//	}
+//	
+//	public void setFrameSpeedOnClick(View v){
+//		String text1 = frameEditText.getText().toString();
+//		frameSpeed = Integer.valueOf(text1);
+//		CameraPreview.frameCaptureSpeed = 30/frameSpeed;
+//		Toast.makeText(this, "Frame Capture Speed: "+frameSpeed, Toast.LENGTH_SHORT).show();
+//		
+//	}
 
 }

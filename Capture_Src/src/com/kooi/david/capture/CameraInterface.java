@@ -40,8 +40,7 @@ public class CameraInterface extends Activity {
 
 	// Other Values
 	public static int BUTTONCOUNT = 0;
-	public static long delayTime = 0;
-	Toast toast;
+	public static long delayTime = 0; //Preference Value
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -49,11 +48,12 @@ public class CameraInterface extends Activity {
 		setContentView(R.layout.activity_camera_interface);
 		
 		captureButton = (Button) findViewById(R.id.captureButton);
+		//Camera and Preview setup--------------------------------->
 		deviceCamera = getCameraInstance();
 		cameraPreview = new CameraPreview(this, deviceCamera);
 		preview = (FrameLayout) findViewById(R.id.cameraPreview);
 		preview.addView(cameraPreview);
-		
+		//----------------------------------------------------------^
         getWindow().addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON); //Keep screen running
         
 
