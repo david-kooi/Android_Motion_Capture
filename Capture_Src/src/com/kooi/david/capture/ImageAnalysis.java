@@ -3,27 +3,18 @@ package com.kooi.david.capture;
 import android.graphics.Color;
 
 import android.graphics.Bitmap;
-import android.os.Environment;
 import android.util.Log;
-import android.widget.Toast;
-import org.apache.commons.io.FileUtils;
 
-import java.io.File;
-import java.io.IOException;
 import java.lang.Math;
-import java.util.ArrayList;
-
 
 public class ImageAnalysis {
 	
-	//Test Values
+	//Test Values-------->
 	static double meanSD;
 	static int count = 1;
 	static double sumSD;
-	static ArrayList<String> dataList;
-	static File dataFile;
-	static int fileIndex = 0;
-	//Bitmap
+	
+	//Bitmap------------------->
 	static Bitmap bitmapToScan;
 
 	// Image values------->
@@ -42,22 +33,20 @@ public class ImageAnalysis {
 	// Arrays------------------------>
 	static double rgbArray[][];
 	static double resultantRgbArray[][];
+	static double controlRgbArray[][];
 
 	// Control Values----------------->
-	static double controlRgbArray[][];
 	static double TEMPMEAN = 0;
 	static double controlMean = 0;
 	static int runIndex = 0; // How many times ImageAnalysis has been run
 
-	// Sets the gridHeight, gridWidth, and increments...etc
-	// Prepares Bitmap for analysis
 	public static void setBitmapSpecs(Bitmap whatBitmap) {
 		imgHeight = whatBitmap.getHeight();
 		imgWidth = whatBitmap.getWidth();
 
 		// TODO: Create algorithm for incrementation
 		// Horizontal and Vertical increments set for a 480X720 image
-		//Grid: 8X20
+		//Grid: 8X12
 		verticalInc = 60;
 		horizontalInc = 60;
 		gridHeight = (imgHeight / verticalInc) + 1;
@@ -83,34 +72,36 @@ public class ImageAnalysis {
 
 	}
 
+	//TODO: Create a better pixel grid
 	// Extract RGB values from bitmap
-	public static void extractValuesFromBitmap() {
-		Integer i;
-		Integer j;
+	public static void extractDataFromBitmap() {
+		int i;
+		int j;
 
 		//Log.d("Process", "Bitmap Extraction is Go!");
 
 		rgbArray = new double[gridHeight][gridWidth];
-		dataList = new ArrayList<String>();
-		
+
 		for (i = 0; i < gridHeight; i++) {
 			for (j = 0; j < gridWidth; j++) {
+
 
 				baseValue = bitmapToScan.getPixel(j, i);
 				redValue = Color.red(baseValue);
 				greenValue = Color.green(baseValue);
 				blueValue = Color.blue(baseValue);
-				rgbArray[i][j] = (blueValue + redValue + greenValue)/3;
-				
-				//Log.d("Process: ", "Pixel: "+i+","+j);
-				//Log.d("Process","Value: "+rgbArray[i][j]);
+
+				rgbArray[i][j] = redValue;
+
+				// Log.d("Process: ", "Pixel: "+j+","+i);
+				// Log.d("Process","Value: "+rgbArray[rowIndex][colIndex]);
 
 			}
-		}
 
+		}
+		Log.d("Process", "Analysis: Data Extraction Finished");
 
 	}
-	
 
 	public static boolean statisticalAnalysis() {
 		//Log.d("Process", "Analysis is Go!");
@@ -207,7 +198,7 @@ public class ImageAnalysis {
 			}
 		}
 
-		//Mean of squared differences
+		// mean of squared differences
 		meanOfSD = sumOfSD / total;
 		standardDeviation = Math.sqrt(meanOfSD);
 		//Find the mean SD 
