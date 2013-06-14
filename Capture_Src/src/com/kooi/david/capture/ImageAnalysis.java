@@ -71,7 +71,7 @@ public class ImageAnalysis {
 		}
 
 	}
-	//
+
 	//TODO: Create a better pixel grid
 	// Extract RGB values from bitmap
 	public static void analyzeBitmap() {

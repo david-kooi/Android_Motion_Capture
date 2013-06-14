@@ -32,10 +32,10 @@ public class CameraPreview extends SurfaceView implements
 	private byte[] frame = new byte[1];
 	private Camera deviceCamera;
 	Camera.Parameters cameraParams;
-	static int frameCaptureSpeed = 7; // Speed for motion Detection is 7
+	static int frameCaptureSpeed = 5; // Speed for motion Detection is 7
 										// (4.2fps)
 										// Speed for rapid capture is 5 (6fps)
-
+										//Preference Value
 	// Preview Variables------------->
 	private SurfaceHolder thisHolder;
 	private int previewHeight;
@@ -49,21 +49,17 @@ public class CameraPreview extends SurfaceView implements
 	ArrayList<byte[]> byteBuffer;
 
 	// Process values--------------->
-	int buttonCount; // Counts how many times the capture button has been
-						// pressed
 
-	static int startSequence = 0;   // 0: Motion Detection
-									// 1: Rapid Frame Save
+	static int detectOrCapture = 0;   // 0: Motion Detection
+									  // 1: Rapid Frame Save
+									 //Preference Value
 	boolean captureFrame = false;
 	int frameCount = 0;
 	int loopCount = 0;
 	boolean extractFromBuffer = false;
 	boolean motionTrigger = false;
+	static boolean optimizedDecode = false; 
 
-	// Other values------------>
-	double meanOne;
-	double meanTwo;
-	Toast toast;
 
 	@SuppressWarnings("deprecation")
 	public CameraPreview(Context whatContext, Camera whatCamera) {
@@ -85,14 +81,16 @@ public class CameraPreview extends SurfaceView implements
 
 	}
 
+	
+	//Depreciated
 	private void motionSettings() {
 		if (AppSettings.motionToggle) {
-			startSequence = 0;
+			detectOrCapture = 0;
 		} else {
-			startSequence = 1;
+			detectOrCapture = 1;
 		}
 	}
-
+	//Depreciated 
 	private void frameCaptureSettings() {
 		if (AppSettings.frameSpeed != 0) {
 			frameCaptureSpeed = AppSettings.frameSpeed;
@@ -104,11 +102,9 @@ public class CameraPreview extends SurfaceView implements
 	// Controls the flow of the program
 	private void processControler() {
 		if (CameraInterface.BUTTONPRESSED) {
-			if (frameCount == 0 || frameCount == frameCaptureSpeed) {
+			if (frameCount == frameCaptureSpeed) {
 				captureFrame = true;
-				if (frameCount == frameCaptureSpeed) {
-					frameCount = 0;
-				}
+				frameCount = 0;
 			} else {
 				captureFrame = false;
 			}
@@ -123,7 +119,7 @@ public class CameraPreview extends SurfaceView implements
 		public void onPreviewFrame(byte[] data, Camera camera) {
 			processControler();
 			if (captureFrame) {
-				deviceCamera.startPreview();
+				//deviceCamera.startPreview();
 				Log.d("Process", "*****FRAME_CAPTURE*****");
 				frame[0] = (byte) frame_number;
 
@@ -143,35 +139,46 @@ public class CameraPreview extends SurfaceView implements
 		private final int HEIGHT = previewHeight;
 		private final int ARRAY_LENGTH = previewWidth * previewWidth * 3 / 2;
 
-		// pre-allocated working arrays
+		// Pre-allocated working arrays
 		private int[] argb8888 = new int[ARRAY_LENGTH];
 
 		@Override
 		protected Boolean doInBackground(byte[]... data) {
 			// Log.d("Process", "FrameHandler is Go!");
-
-			// startSequence = 0: image analysis
-			// startSequence = 1: Saves byte data to a buffer...byte data will
-			// be compressed into a jpeg post capture
-			switch (startSequence) {
+//
+			/* If detectOrCapture = 0: image analysis
+			   If detectOrCaoture = 1: Saves byte data to a buffer...byte data will
+			 be compressed into a jpeg post capture
+			 */
+			switch (detectOrCapture) {
 			case 0:
-				// Decode
 				Log.d("Data", "***Analysis Start***");
-				decodeYUV(argb8888, data[0], WIDTH, HEIGHT);
-				// Log.d("Process", "Analysis: Decode Finished");
-				// Create Bitmap
-				final Bitmap bitmap = Bitmap.createBitmap(argb8888, WIDTH,
-						HEIGHT, Config.ARGB_8888);
-				// Analyze Bitmap
-				ImageAnalysis.setBitmapSpecs(bitmap);
-				ImageAnalysis.analyzeBitmap();
-				motionTrigger = ImageAnalysis.statisticalAnalysis();
-				ImageAnalysis.runIndex++;
-				if (motionTrigger) { 
-					Log.d("Data", "*****MOTION*****");
-					Log.d("Process", "*****MOTION*****");
-					startSequence = 1;
-					return true;
+				if(!optimizedDecode){ //Initial Decode
+					Log.d("Process","Standard Decode");
+					decodeYUV(argb8888, data[0], WIDTH, HEIGHT);//1. Decode data
+					final Bitmap bitmap = Bitmap.createBitmap(argb8888, WIDTH, //2. Create bitmap from data
+							HEIGHT, Config.ARGB_8888);
+					ImageAnalysis.setBitmapSpecs(bitmap);//Set variables in ImageAnalysis
+					optimizedDecode = true;
+				}
+				else{ //Optimized Decode
+					Log.d("Process", "Optimized Decode");
+					// Analyze Bitmap
+					decodeYUVForMotion(argb8888,data[0],WIDTH,HEIGHT); //1. Decode Data
+					final Bitmap bitmap = Bitmap.createBitmap(argb8888, ImageAnalysis.gridWidth, //2. Create bitmap from data
+							ImageAnalysis.gridHeight, Config.ARGB_8888);
+					Log.d("Check", "Optimized Height: " + bitmap.getHeight());
+					Log.d("Check", "Optimized Height: " + bitmap.getWidth());
+					ImageAnalysis.setBitmapSpecs(bitmap);
+					ImageAnalysis.analyzeBitmap();							//3. Analyze bitmap
+					motionTrigger = ImageAnalysis.statisticalAnalysis();   //4. Returns boolean based on analysis
+					ImageAnalysis.runIndex++;
+					if (motionTrigger) { 
+						Log.d("Data", "*****MOTION*****");
+						Log.d("Process", "*****MOTION*****");
+						detectOrCapture = 1;
+						return true;
+					}
 				}
 				break;
 			case 1:
@@ -218,6 +225,7 @@ public class CameraPreview extends SurfaceView implements
 				fos = new FileOutputStream(pictureFile);
 				// Log.d("Process", "FileOutputStream Created");
 				bitmap.compress(Bitmap.CompressFormat.JPEG, 100, fos);
+				
 				// Log.d("Process",
 				// "Bitmap Compressed To: "
 				// + pictureFile.getAbsolutePath());
@@ -356,7 +364,6 @@ public class CameraPreview extends SurfaceView implements
 	}
 
 	
-	//TODO: Find a way for a faster decode
 	// David Manpearl 081201 
 	public void decodeYUV(int[] out, byte[] fg, int width, int height)
 			throws NullPointerException, IllegalArgumentException {
@@ -410,10 +417,81 @@ public class CameraPreview extends SurfaceView implements
 				else if (B > 255)
 					B = 255;
 				out[pixPtr++] = 0xff000000 + (B << 16) + (G << 8) + R;
+				//Log.d("Pix", "pixPtr: " + pixPtr);
+
 			}
 		}
 
 	}
 	
+	
+	//Not sure of this decode works
+	public void decodeYUVForMotion(int[] out, byte[] fg, int width, int height)
+			throws NullPointerException, IllegalArgumentException {
+		int sz = width * height;
+		if (out == null)
+			throw new NullPointerException("buffer out is null");
+		if (out.length < sz)
+			throw new IllegalArgumentException("buffer out size " + out.length
+					+ " < minimum " + sz);
+		if (fg == null)
+			throw new NullPointerException("buffer 'fg' is null");
+		if (fg.length < sz)
+			throw new IllegalArgumentException("buffer fg size " + fg.length
+					+ " < minimum " + sz * 3 / 2);
+		int i, j;
+		int count = 0;
+		int Y, Cr = 0, Cb = 0;
+		for (j = 0; j <= height; j= j + ImageAnalysis.verticalInc) {
+			if(j == height){
+				j = height - 1;
+			}
+			int pixPtr = j * width;
+			int outIndex = count * ImageAnalysis.gridWidth;
+			count++;
+			final int jDiv2 = j >> 1;
+			for (i = 0; i < ImageAnalysis.gridWidth; i++) {
+				Y = fg[pixPtr];
+				//Log.d("Data", "Y: " + Y);
+				if (Y < 0)
+					Y += 255;
+				if ((i & 0x1) != 1) {
+					final int cOff = sz + jDiv2 * width + (i >> 1) * 2;
+					Cb = fg[cOff];
+					if (Cb < 0)
+						Cb += 127;
+					else
+						Cb -= 128;
+					Cr = fg[cOff + 1];
+					if (Cr < 0)
+						Cr += 127;
+					else
+						Cr -= 128;
+				}
+				int R = Y + Cr + (Cr >> 2) + (Cr >> 3) + (Cr >> 5);
+				if (R < 0)
+					R = 0;
+				else if (R > 255)
+					R = 255;
+				int G = Y - (Cb >> 2) + (Cb >> 4) + (Cb >> 5) - (Cr >> 1)
+						+ (Cr >> 3) + (Cr >> 4) + (Cr >> 5);
+				if (G < 0)
+					G = 0;
+				else if (G > 255)
+					G = 255;
+				int B = Y + Cb + (Cb >> 1) + (Cb >> 2) + (Cb >> 6);
+				if (B < 0)
+					B = 0;
+				else if (B > 255)
+					B = 255;
+				out[outIndex++] = 0xff000000 + (B << 16) + (G << 8) + R;
+				//Log.d("Index", "j: " + j);
+				//Log.d("Index", "i: " + i);
+				//Log.d("Index", "outIndex: " + outIndex);
+				
+			}
+		}
+
+	}
 
 }
