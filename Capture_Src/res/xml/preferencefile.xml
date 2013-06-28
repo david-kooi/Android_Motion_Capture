@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="utf-8"?>
+<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android" >
+    <CheckBoxPreference 
+        android:key="motion_detection" 
+        android:defaultValue="true" android:title="Motion Detection"/>
+    <CheckBoxPreference 
+        android:key="delay" 
+        android:defaultValue="false" 
+        android:title="Delay"/>
+    <EditTextPreference
+        android:dialogMessage="(Seconds)" 
+        android:negativeButtonText="Cancel" 
+        android:defaultValue="0" 
+        android:dialogTitle="Set Delay" 
+        android:title="Set Delay Time" 
+        android:positiveButtonText="Set" 
+        android:key="edit_delay"/>
+    
+    
+    
+    
+    
+
+</PreferenceScreen>
