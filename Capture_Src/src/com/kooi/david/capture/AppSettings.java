@@ -15,8 +15,6 @@ public class AppSettings extends PreferenceActivity  {
 		addPreferencesFromResource(R.xml.preferencefile);
 		//Settings activity only to be used with android 3.0 and lower
 		//Create SettingsFragment for 3.0 and higher
-	    
-
 	}
 		
 }
