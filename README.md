@@ -2,5 +2,9 @@
 Image capture triggered by motion detection on an Android device.
 
 
-Written By David Kooi
-kooi.david.w@gmail.com
+Images:
+1. In Flight!
+2. Around the Bend
+3. Walking Test Shot
+
+http://imgur.com/a/iX8U8
